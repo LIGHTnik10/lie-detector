@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: lie-detector
+    env: node
+    buildCommand: npm run render-build
+    startCommand: cd server && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production

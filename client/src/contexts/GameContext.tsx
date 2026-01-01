@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
 import { io, Socket } from 'socket.io-client';
 import type { PlayerData, AnswerData, RoundResult, GameState } from '../types';
 
@@ -145,7 +145,12 @@ export function GameProvider({ children }: GameProviderProps) {
     socketInstance.on('playerLeft', ({ players, newHostId }) => {
       setPlayers(players);
       if (newHostId) {
-        setPlayer(prev => prev?.id === newHostId ? { ...prev, isHost: true } : prev);
+        setPlayer(prev => {
+          if (prev && prev.id === newHostId) {
+            return { ...prev, isHost: true };
+          }
+          return prev;
+        });
       }
     });
 
@@ -168,7 +173,7 @@ export function GameProvider({ children }: GameProviderProps) {
       setCurrentResult(null);
     });
 
-    socketInstance.on('answerProgress', ({ answered, total }) => {
+    socketInstance.on('answerProgress', ({ answered }) => {
       setAnsweredCount(answered);
       setPlayers(prev => prev.map(p => ({ ...p })));
     });
