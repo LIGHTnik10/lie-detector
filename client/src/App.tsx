@@ -1,35 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useGame } from './contexts/GameContext';
+import { JoinScreen } from './screens/JoinScreen';
+import { LobbyScreen } from './screens/LobbyScreen';
+import { AnsweringScreen } from './screens/AnsweringScreen';
+import { VotingScreen } from './screens/VotingScreen';
+import { RevealScreen } from './screens/RevealScreen';
+import { ScoreboardScreen } from './screens/ScoreboardScreen';
+import { GameOverScreen } from './screens/GameOverScreen';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { gameState } = useGame();
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  switch (gameState) {
+    case 'idle':
+      return <JoinScreen />;
+    case 'lobby':
+      return <LobbyScreen />;
+    case 'answering':
+      return <AnsweringScreen />;
+    case 'voting':
+      return <VotingScreen />;
+    case 'revealing':
+      return <RevealScreen />;
+    case 'scoreboard':
+      return <ScoreboardScreen />;
+    case 'gameOver':
+      return <GameOverScreen />;
+    default:
+      return <JoinScreen />;
+  }
 }
 
-export default App
+export default App;
